@@ -57,3 +57,37 @@ const int FindFather(int child_index);
 void Union(const int primary_child, const int secondary_child);
 ```
 
+## Heap
+
+> 堆
+
+* **Data**
+
+```C++
+using size_t = unsigned int;
+
+std::vector<int> heap_;
+size_t tail_index_;
+bool big_heap_;
+```
+
+* **public function**
+
+```c++
+explicit Heap(const std::vector<int>& heap, const bool isBigHeap = true);
+
+void Pop();
+void Push(const int val);
+void Sort();
+void Show() const;
+```
+
+* **private function**
+
+```c++
+void MakeHeap();
+void DownAdjust(const int begin_index, const int end_index);
+void UpAdjust(const int begin_index, const int end_index);
+bool JudgeForOrder(const int left_value, const int right_value) const;
+```
+
