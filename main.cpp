@@ -1,11 +1,13 @@
 #include "avltree.h"
 #include "disjointset.h"
+#include "heap.h"
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
 
 using myalgorithm::AVLTree;
 using myalgorithm::DisJointSet;
+using myalgorithm::Heap;
 
 void TestAVLTree() {
 	AVLTree avltree;
@@ -38,7 +40,19 @@ void TestDisJointSet() {
 	std::cout << set_roots.size() << std::endl;
 }
 
+void TestHeap() {
+	std::vector<int> origin{ 0,3,6,4,3,7,9,1,2 };
+	Heap heap(origin, false);
+
+	heap.Show();
+	heap.Push(5);
+	heap.Show();
+	heap.Sort();
+	heap.Show();
+}
+
 int main() {
 	//TestAVLTree();
-	TestDisJointSet();
+	//TestDisJointSet();
+	TestHeap();
 }
