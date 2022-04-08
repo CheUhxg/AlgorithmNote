@@ -7,7 +7,7 @@ namespace myalgorithm {
 class DisJointSet
 {
 private:
-	std::vector<int> father;
+	std::vector<int> father_;
 
 public:
 	explicit DisJointSet(const int set_size);
