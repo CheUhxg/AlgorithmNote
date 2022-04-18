@@ -14,6 +14,14 @@ namespace myalgorithm {
 		return new AVLNode(val);
 	}
 
+	void AVLTree::Delete(AVLNode* root) {
+		if (root == nullptr)
+			return;
+		Delete(root->left_);
+		Delete(root->right_);
+		delete root;
+	}
+
 	int AVLTree::get_height(AVLNode* root) {
 		if (root == nullptr)
 			return 0;

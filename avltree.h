@@ -17,6 +17,7 @@ public:
 	AVLNode* Create(const std::vector<int>& datas);
 	AVLNode* Search(const int val, AVLNode* root);
 	AVLNode* Insert(const int val, AVLNode* root);
+	void Delete(AVLNode* root);
 	void Show(const AVLNode* root);
 
 private:
