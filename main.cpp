@@ -1,6 +1,7 @@
 #include "avltree.h"
 #include "disjointset.h"
 #include "heap.h"
+#include "huffmantree.h"
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
@@ -8,6 +9,7 @@
 using myalgorithm::AVLTree;
 using myalgorithm::DisJointSet;
 using myalgorithm::Heap;
+using myalgorithm::HuffmanTree;
 
 void TestAVLTree() {
 	AVLTree avltree;
@@ -15,6 +17,7 @@ void TestAVLTree() {
 	AVLTree::AVLNode* root = avltree.Create(datas);
 	std::cout << (avltree.Search(3, root) == nullptr) << std::endl;
 	avltree.Show(root);
+	avltree.Delete(root);
 }
 
 void TestDisJointSet() {
@@ -51,8 +54,15 @@ void TestHeap() {
 	heap.Show();
 }
 
+void TestHuffmanTree() {
+	HuffmanTree huffmantree(std::vector<int>{ 6, 1, 2, 3, 4, 5 });
+	huffmantree.Show();
+	std::cout << huffmantree.sum() << std::endl;
+}
+
 int main() {
-	//TestAVLTree();
+	TestAVLTree();
 	//TestDisJointSet();
-	TestHeap();
+	//TestHeap();
+	TestHuffmanTree();
 }
