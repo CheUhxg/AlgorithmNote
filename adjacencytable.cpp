@@ -1,0 +1,80 @@
+#include "adjacencytable.h"
+#include <iostream>
+
+namespace myalgorithm {
+
+AdjacencyTable::AdjacencyTable(const size_t node_size)
+	: node_size_(node_size),
+	table_(node_size, std::list<Node>()) {}
+
+bool AdjacencyTable::HasEdge(const size_t node_out, const size_t node_in) const {
+	for (const auto& node : table_[node_out]) {
+		if (node.vertex_ == node_in)
+			return true;
+	}
+	return false;
+}
+
+bool AdjacencyTable::UpdateEdge(const size_t node_out,
+	const size_t node_in,
+	const int weight) {
+	if (node_out >= node_size_ || node_in >= node_size_ ||
+			weight <= 0) {
+		return false;
+	}
+
+	table_[node_out].push_back(Node(weight, node_in));
+	return true;
+}
+
+bool AdjacencyTable::DeleteEdge(const size_t node_out, const size_t node_in) {
+	if (node_out >= node_size_ || node_in >= node_size_ ||
+			!HasEdge(node_out, node_in)) {
+		return false;
+	}
+
+	for (auto iter = table_[node_out].begin();
+			iter != table_[node_out].end();
+			++iter) {
+		if (iter->vertex_ == node_in) {
+			table_[node_out].erase(iter);
+			break;
+		}
+	}
+	return true;
+}
+
+void AdjacencyTable::Show() const {
+	for (int i = 0; i < node_size_; ++i) {
+		std::cout << i << ":\t";
+		for (const auto& node : table_[i]) {
+			std::cout << node.vertex_ 
+								<< "(" << node.weight_ << ")" << "\t";
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+void AdjacencyTable::DFS(const size_t start_vertex,
+													std::vector<size_t>& ret_vertices) const {
+	if (start_vertex >= node_size_)
+		return;
+	std::vector<bool> is_visited(node_size_, false);
+	DFS(start_vertex, ret_vertices, is_visited);
+}
+
+void AdjacencyTable::DFS(const size_t start_vertex,
+													std::vector<size_t>& ret_vertices,
+													std::vector<bool>& is_visited) const {
+	is_visited[start_vertex] = true;
+	ret_vertices.push_back(start_vertex);
+
+	for (const auto& node : table_[start_vertex]) {
+		if (!is_visited[node.vertex_]) {
+			DFS(node.vertex_, ret_vertices, is_visited);
+		}
+	}
+}
+
+}
