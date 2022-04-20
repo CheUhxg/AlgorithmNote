@@ -1,5 +1,6 @@
 #include "adjacencytable.h"
 #include <iostream>
+#include <queue>
 
 namespace myalgorithm {
 
@@ -73,6 +74,33 @@ void AdjacencyTable::DFS(const size_t start_vertex,
 	for (const auto& node : table_[start_vertex]) {
 		if (!is_visited[node.vertex_]) {
 			DFS(node.vertex_, ret_vertices, is_visited);
+		}
+	}
+}
+
+void AdjacencyTable::BFS(const size_t start_vertex,
+												 std::vector<size_t>& ret_vertices) const {
+	if (start_vertex >= node_size_)
+		return;
+	std::vector<bool> is_visited(node_size_, false);
+	
+	std::queue<size_t> queue_vertex;
+	is_visited[start_vertex] = true;
+	queue_vertex.push(start_vertex);
+
+	while (!queue_vertex.empty()) {
+		int queue_len = queue_vertex.size();
+		for (int i = 0; i < queue_len; ++i) {
+			size_t vertex = queue_vertex.front();
+			queue_vertex.pop();
+			ret_vertices.push_back(vertex);
+
+			for (const auto& next_node : table_[vertex]) {
+				if (!is_visited[next_node.vertex_]) {
+					is_visited[next_node.vertex_] = true;
+					queue_vertex.push(next_node.vertex_);
+				}
+			}
 		}
 	}
 }

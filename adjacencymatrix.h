@@ -23,6 +23,8 @@ public:
 
 	void DFS(const size_t start_vertex,
 					 std::vector<size_t>& ret_vertices) const;
+	void BFS(const size_t start_vertex,
+					 std::vector<size_t>& ret_vertices) const;
 };
 }
 

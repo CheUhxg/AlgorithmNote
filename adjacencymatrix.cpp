@@ -1,5 +1,6 @@
 #include "adjacencymatrix.h"
 #include <iostream>
+#include <queue>
 
 namespace myalgorithm {
 
@@ -47,7 +48,7 @@ void AdjacencyMatrix::Show() const {
 }
 
 void AdjacencyMatrix::DFS(const size_t start_vertex,
-	std::vector<size_t>& ret_vertices) const {
+													std::vector<size_t>& ret_vertices) const {
 	if (start_vertex >= node_size_)
 		return;
 	std::vector<bool> is_visited(node_size_, false);
@@ -63,6 +64,33 @@ void AdjacencyMatrix::DFS(const size_t start_vertex,
 	for (size_t i = 0; i < node_size_; ++i) {
 		if (graph_[start_vertex][i] > 0 && !is_visited[i]) {
 			DFS(i, ret_vertices, is_visited);
+		}
+	}
+}
+
+void AdjacencyMatrix::BFS(const size_t start_vertex,
+													std::vector<size_t>& ret_vertices) const {
+	if (start_vertex >= node_size_)
+		return;
+	std::vector<bool> is_visited(node_size_, false);
+
+	std::queue<size_t> queue_vertex;
+	is_visited[start_vertex] = true;
+	queue_vertex.push(start_vertex);
+
+	while (!queue_vertex.empty()) {
+		int queue_len = queue_vertex.size();
+		for (int i = 0; i < queue_len; ++i) {
+			size_t vertex = queue_vertex.front();
+			queue_vertex.pop();
+			ret_vertices.push_back(vertex);
+
+			for (int i = 0; i < node_size_; ++i) {
+				if (graph_[vertex][i] > 0 && !is_visited[i]) {
+					is_visited[i] = true;
+					queue_vertex.push(i);
+				}
+			}
 		}
 	}
 }
