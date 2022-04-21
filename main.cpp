@@ -69,35 +69,35 @@ void TestHuffmanTree() {
 void TestAdjacencyMatrix() {
 	AdjacencyMatrix adjmat(6);
 	adjmat.UpdateEdge(0, 1, 1);
-	adjmat.UpdateEdge(0, 2, 1);
-	adjmat.UpdateEdge(1, 3, 1);
-	adjmat.UpdateEdge(1, 4, 1);
-	adjmat.UpdateEdge(2, 1, 1);
-	adjmat.UpdateEdge(2, 4, 1);
-	adjmat.UpdateEdge(4, 3, 1);
-	adjmat.UpdateEdge(4, 5, 1);
-	adjmat.UpdateEdge(5, 3, 1);
+	adjmat.UpdateEdge(0, 4, 4);
+	adjmat.UpdateEdge(0, 3, 4);
+	adjmat.UpdateEdge(1, 3, 2);
+	adjmat.UpdateEdge(2, 5, 1);
+	adjmat.UpdateEdge(3, 2, 2);
+	adjmat.UpdateEdge(3, 4, 3);
+	adjmat.UpdateEdge(4, 5, 3);
 	adjmat.Show();
 
-	std::vector<size_t> ret_vertices;
-	adjmat.BFS(0, ret_vertices);
+	std::vector<size_t> ret_path;
+	std::vector<int> ret_weights;
+	adjmat.Dijkstra(0, ret_path, ret_weights);
 }
 
 void TestAdjacencyTable() {
 	AdjacencyTable adjtab(6);
 	adjtab.UpdateEdge(0, 1, 1);
-	adjtab.UpdateEdge(0, 2, 1);
-	adjtab.UpdateEdge(1, 3, 1);
-	adjtab.UpdateEdge(1, 4, 1);
-	adjtab.UpdateEdge(2, 1, 1);
-	adjtab.UpdateEdge(2, 4, 1);
-	adjtab.UpdateEdge(4, 3, 1);
-	adjtab.UpdateEdge(4, 5, 1);
-	adjtab.UpdateEdge(5, 3, 1);
+	adjtab.UpdateEdge(0, 4, 4);
+	adjtab.UpdateEdge(0, 3, 4);
+	adjtab.UpdateEdge(1, 3, 2);
+	adjtab.UpdateEdge(2, 5, 1);
+	adjtab.UpdateEdge(3, 2, 2);
+	adjtab.UpdateEdge(3, 4, 3);
+	adjtab.UpdateEdge(4, 5, 3);
 	adjtab.Show();
 
-	std::vector<size_t> ret_vertices;
-	adjtab.BFS(0, ret_vertices);
+	std::vector<size_t> ret_path;
+	std::vector<int> ret_weights;
+	adjtab.Dijkstra(0, ret_path, ret_weights);
 }
 
 int main() {
