@@ -95,4 +95,35 @@ void AdjacencyMatrix::BFS(const size_t start_vertex,
 	}
 }
 
+void AdjacencyMatrix::Dijkstra(const size_t start_vertex,
+															std::vector<size_t>& path,
+															std::vector<int>& ret_weights) const {
+	if (start_vertex >= node_size_)
+		return;
+	std::vector<bool> is_visited(node_size_, false);
+	std::vector<int> distance(node_size_, 0x3fffffff);
+	
+	distance[start_vertex] = 0;
+	for (int i = 0; i < node_size_; ++i) {
+		size_t min_vertex = -1;
+		for (int j = 0; j < node_size_; ++j) {
+			if (is_visited[j] == false) {
+				if (min_vertex == -1 ||
+						distance[min_vertex] > distance[j]) {
+					min_vertex = j;
+				}
+			}
+		}
+		is_visited[min_vertex] = true;
+		path.push_back(min_vertex);
+		for (int j = 0; j < node_size_; ++j) {
+			if (!is_visited[j] && graph_[min_vertex][j] > 0 &&
+				graph_[min_vertex][j] + distance[min_vertex] < distance[j]) {
+				distance[j] = graph_[min_vertex][j] + distance[min_vertex];
+			}
+		}
+	}
+	ret_weights.swap(distance);
+}
+
 }

@@ -25,6 +25,9 @@ public:
 					 std::vector<size_t>& ret_vertices) const;
 	void BFS(const size_t start_vertex,
 					 std::vector<size_t>& ret_vertices) const;
+	void Dijkstra(const size_t start_vertex,
+								std::vector<size_t>& path,
+								std::vector<int>& ret_weights) const;
 };
 }
 
