@@ -37,6 +37,7 @@ private:
 												const std::vector<char>& = std::vector<char>());
 	void DeleteTree(HuffmanNode* root);
 	void GetHash(const HuffmanNode* root, std::string& now_code);
+	void Show(const HuffmanNode* root, const int level) const;
 public:
 	explicit HuffmanTree(const std::vector<int>& weights);
 	~HuffmanTree();

@@ -93,26 +93,22 @@ AVLTree::AVLNode* AVLTree::Insert(const int val, AVLNode* root) {
 	return root;
 }
 
-void AVLTree::Show(const AVLNode* root) {
+void AVLTree::Show(const AVLNode* root) const{
 	if (root == nullptr)
 		return;
-	std::queue<const AVLNode*> show_queue;
-	show_queue.push(root);
-	while (!show_queue.empty()) {
-		int size_queue = show_queue.size();
-		for (int i = 0; i < size_queue; ++i) {
-			const AVLNode* tmp = show_queue.front();
-			show_queue.pop();
-			if (tmp == nullptr) {
-				std::cout << ". ";
-				continue;
-			}
-			std::cout << tmp->val_ << " ";
-			show_queue.push(tmp->left_);
-			show_queue.push(tmp->right_);
-		}
-		std::cout << std::endl;
+
+	Show(root, 0);
+}
+
+void AVLTree::Show(const AVLNode* root, const int level) const {
+	for (int i = 0; i < level; ++i) {
+		std::cout << "->";
 	}
+	std::cout << root->val_ << std::endl;
+	if (root->left_ != nullptr)
+		Show(root->left_, level + 1);
+	if (root->right_ != nullptr)
+		Show(root->right_, level + 1);
 }
 
 AVLTree::AVLNode* AVLTree::LeftRotation(AVLNode* root) {

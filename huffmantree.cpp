@@ -71,24 +71,18 @@ void HuffmanTree::Show() const {
 	if (p_tree_head_ == nullptr)
 		return;
 
-	std::queue<HuffmanNode*> queue_node;
-	queue_node.push(p_tree_head_);
-	while (!queue_node.empty()) {
-		size_t queue_size = queue_node.size();
-		for (int i = 0; i < queue_size; ++i) {
-			HuffmanNode* tmp = queue_node.front();
-			queue_node.pop();
+	Show(p_tree_head_, 0);
+}
 
-			if (tmp == nullptr) {
-				std::cout << ". ";
-				continue;
-			}
-			std::cout << tmp->val_ << " ";
-			queue_node.push(tmp->left_);
-			queue_node.push(tmp->right_);
-		}
-		std::cout << std::endl;
+void HuffmanTree::Show(const HuffmanNode* root, const int level) const {
+	for (int i = 0; i < level; ++i) {
+		std::cout << "->";
 	}
+	std::cout << root->val_ << std::endl;
+	if (root->left_ != nullptr)
+		Show(root->left_, level + 1);
+	if (root->right_ != nullptr)
+		Show(root->right_, level + 1);
 }
 
 std::string HuffmanTree::Encode(const std::string& origin_str) {

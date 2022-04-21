@@ -18,7 +18,7 @@ public:
 	AVLNode* Search(const int val, AVLNode* root);
 	AVLNode* Insert(const int val, AVLNode* root);
 	void Delete(AVLNode* root);
-	void Show(const AVLNode* root);
+	void Show(const AVLNode* root) const;
 
 private:
 	AVLNode* new_node(const int val);
@@ -29,6 +29,8 @@ private:
 
 	AVLNode* LeftRotation(AVLNode* root);
 	AVLNode* RightRotation(AVLNode* root);
+
+	void Show(const AVLNode* root, const int level) const;
 };	// class AVLTree
 }	//	namespace myalgorithm
 
