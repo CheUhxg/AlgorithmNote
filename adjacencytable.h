@@ -38,8 +38,7 @@ namespace myalgorithm {
 		void Dijkstra(const size_t start_vertex,
 									std::vector<size_t>& path,
 									std::vector<int>& ret_weights) const;
-		const AdjacencyTable&
-		Prime(const AdjacencyTable& origin_table);
+		uint32_t Prime(const AdjacencyTable& origin_table);
 	};
 }
 
