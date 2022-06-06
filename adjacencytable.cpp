@@ -150,17 +150,18 @@ uint32_t AdjacencyTable::Prime() const {
 	uint32_t ret_len = 0;
 	distance[0] = 0;
 	for (int i = 0; i < node_size_; ++i) {
-		now_index = 0;
+		now_index = -1;
 		for (int j = 0; j < node_size_; ++j) {
-			if (visited.count(i) == 0 &&
-				distance[j] < distance[now_index]) {
-				now_index = i;
+			if (visited.count(j) == 0 &&
+					(now_index == -1 || 
+						distance[j] < distance[now_index])) {
+				now_index = j;
 			}
 		}
 		visited.insert(now_index);
 		ret_len += distance[now_index];
 		for (const auto& node : table_[now_index]) {
-			distance[node.vertex_] = std::max(distance[node.vertex_],
+			distance[node.vertex_] = std::min(distance[node.vertex_],
 																				distance[now_index] + node.weight_);
 		}
 	}
