@@ -10,8 +10,8 @@ namespace myalgorithm {
 	private:
 		struct Node
 		{
-			int weight_;
 			size_t vertex_;
+			int weight_;
 			explicit Node(const int weight, const size_t vertex)
 				: weight_(weight), vertex_(vertex) {}
 		};
