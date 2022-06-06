@@ -140,13 +140,7 @@ void AdjacencyTable::Dijkstra(const size_t start_vertex,
 	ret_weights.swap(distance);
 }
 
-uint32_t AdjacencyTable::Prime(const AdjacencyTable& origin) {
-	if (this->node_size_ != origin.node_size_) {
-		this->node_size_ = origin.node_size_;
-		this->table_.reserve(this->node_size_);
-	}
-	this->table_.clear();
-
+uint32_t AdjacencyTable::Prime() {
 	std::vector<int> distance(node_size_, MAX_DISTANCE);
 	std::unordered_set<int> visited;
 	int now_index;
@@ -162,7 +156,7 @@ uint32_t AdjacencyTable::Prime(const AdjacencyTable& origin) {
 		}
 		visited.insert(now_index);
 		ret_len += distance[now_index];
-		for (const auto& node : origin.table_[now_index]) {
+		for (const auto& node : table_[now_index]) {
 			distance[node.vertex_] = std::max(distance[node.vertex_],
 																				distance[now_index] + node.weight_);
 		}
