@@ -137,4 +137,10 @@ void AdjacencyTable::Dijkstra(const size_t start_vertex,
 	ret_weights.swap(distance);
 }
 
+const AdjacencyTable&
+AdjacencyTable::Prime(const AdjacencyTable& origin_table) {
+	
+	return *this;
+}
+
 }
