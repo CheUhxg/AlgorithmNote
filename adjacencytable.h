@@ -26,8 +26,8 @@ namespace myalgorithm {
 	public:
 		explicit AdjacencyTable(const size_t node_size);
 
-		bool UpdateEdge(const size_t node_out, const size_t node_in, const int weight);
-		bool DeleteEdge(const size_t node_out, const size_t node_in);
+		bool UpdateEdge(const size_t node_out, const size_t node_in, const int weight, const bool unidirectional = true);
+		bool DeleteEdge(const size_t node_out, const size_t node_in, const bool unidirectional = true);
 
 		void Show() const;
 

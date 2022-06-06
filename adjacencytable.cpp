@@ -22,17 +22,20 @@ bool AdjacencyTable::HasEdge(const size_t node_out, const size_t node_in) const 
 
 bool AdjacencyTable::UpdateEdge(const size_t node_out,
 	const size_t node_in,
-	const int weight) {
+	const int weight,
+	const bool unidirectional) {
 	if (node_out >= node_size_ || node_in >= node_size_ ||
 			weight <= 0) {
 		return false;
 	}
 
 	table_[node_out].push_back(Node(weight, node_in));
-	return true;
+	return unidirectional ? true : UpdateEdge(node_in, node_out, weight);
 }
 
-bool AdjacencyTable::DeleteEdge(const size_t node_out, const size_t node_in) {
+bool AdjacencyTable::DeleteEdge(const size_t node_out,
+	const size_t node_in,
+	const bool unidirectional) {
 	if (node_out >= node_size_ || node_in >= node_size_ ||
 			!HasEdge(node_out, node_in)) {
 		return false;
@@ -46,7 +49,7 @@ bool AdjacencyTable::DeleteEdge(const size_t node_out, const size_t node_in) {
 			break;
 		}
 	}
-	return true;
+	return unidirectional ? true : DeleteEdge(node_in, node_out);
 }
 
 void AdjacencyTable::Show() const {
