@@ -28,7 +28,8 @@ std::vector<std::vector<int>>
 	assert(lfs.size() == lfs[0].size() && rhs.size() == rhs[0].size());
 	assert(lfs.size() == rhs.size());
 
-	std::vector<std::vector<int>> result(lfs);
+	int dim = lfs.size();
+	std::vector<std::vector<int>> result(dim, std::vector<int>(dim, 0));
 	MultiMatrix(result, lfs, 0, 0, rhs, 0, 0);
 	return result;
 }
@@ -93,35 +94,119 @@ void Strassen::MultiMatrix(std::vector<std::vector<int>>& result,
 		AddMatrix(result, 0, 0, 
 							P[5], 0, 0, 
 							P[4], 0, 0, 
-							true, dim / 2);
+							true, dim / 2, dim / 2);
 		AddMatrix(result, 0, 0, 
 							result, 0, 0, 
 							P[2], 0, 0, 
-							false, dim / 2);
+							false, dim / 2, dim / 2);
 		AddMatrix(result, 0, 0, 
 							result, 0, 0, 
 							P[6], 0, 0, 
-							true, dim / 2);
+							true, dim / 2, dim / 2);
 		//C12
 		AddMatrix(result, 0, dim / 2,
 							P[1], 0, 0, 
 							P[2], 0, 0, 
-							true, dim / 2);
+							true, dim / 2, dim / 2);
 		//C21
 		AddMatrix(result, dim / 2, 0,
 							P[3], 0, 0,
 							P[4], 0, 0,
-							true, dim / 2);
+							true, dim / 2, dim / 2);
 		//C22
 		AddMatrix(result, dim / 2, dim / 2,
 							P[5], 0, 0, P[1], 0, 0,
-							true, dim / 2);
+							true, dim / 2, dim / 2);
 		AddMatrix(result, dim / 2, dim / 2,
 							result, dim / 2, dim / 2,
-							P[3], 0, 0, false, dim / 2);
+							P[3], 0, 0, false, dim / 2, dim / 2);
 		AddMatrix(result, dim / 2, dim / 2,
 							result, dim / 2, dim / 2,
-							P[7], 0, 0, false, dim / 2);
+							P[7], 0, 0, false, dim / 2, dim / 2);
+	}
+	else {
+		std::vector<std::vector<std::vector<int>>> C(4);
+		C[0] = std::vector<std::vector<int>>(dim - 1,
+			std::vector<int>(dim - 1, 0));
+		MultiMatrix(C[0], lfs, l_x, l_y, rhs, r_x, r_y);
+		AddMatrix(result, 0, 0,
+							result, 0, 0,
+							C[0], 0, 0,
+							true, dim - 1, dim - 1);
+		MultiMatrix(C[0], dim - 1, 1, dim - 1,
+								lfs, l_x, l_y + dim - 1,
+								rhs, r_x + dim - 1, r_y);
+		AddMatrix(result, 0, 0,
+							result, 0, 0,
+							C[0], 0, 0,
+							true, dim - 1, dim - 1);
+
+		C[1] = std::vector<std::vector<int>>(dim - 1,
+			std::vector<int>(1, 0));
+		MultiMatrix(C[1], dim - 1, dim - 1, 1,
+								lfs, l_x, l_y,
+								rhs, r_x, r_y + dim - 1);
+		AddMatrix(result, 0, dim - 1,
+							result, 0, dim - 1,
+							C[1], 0, 0,
+							true, dim - 1, 1);
+		MultiMatrix(C[1], dim - 1, 1, 1,
+								lfs, l_x, l_y + dim - 1,
+								rhs, r_x + dim - 1, r_y + dim - 1);
+		AddMatrix(result, 0, dim - 1,
+							result, 0, dim - 1,
+							C[1], 0, 0,
+							true, dim - 1, 1);
+
+		C[2] = std::vector<std::vector<int>>(1,
+			std::vector<int>(dim - 1, 0));
+		MultiMatrix(C[2], 1, dim - 1, dim - 1,
+								lfs, l_x + dim - 1, l_y,
+								rhs, r_x, r_y);
+		AddMatrix(result, dim - 1, 0,
+							result, dim - 1, 0,
+							C[2], 0, 0,
+							true, 1, dim - 1);
+		MultiMatrix(C[2], 1, 1, dim - 1,
+								lfs, l_x + dim - 1, l_y + dim - 1,
+								rhs, r_x + dim - 1, r_y);
+		AddMatrix(result, dim - 1, 0,
+							result, dim - 1, 0,
+							C[2], 0, 0,
+							true, 1, dim - 1);
+
+		C[3] = std::vector<std::vector<int>>(1,
+			std::vector<int>(1, 0));
+		MultiMatrix(C[3], 1, dim - 1, 1,
+								lfs, l_x + dim - 1, l_y,
+								rhs, r_x, r_y + dim - 1);
+		AddMatrix(result, dim - 1, dim - 1,
+							result, dim - 1, dim - 1,
+							C[3], 0, 0,
+							true, 1, 1);
+		MultiMatrix(C[3], 1, 1, 1,
+								lfs, l_x + dim - 1, l_y + dim - 1,
+								rhs, r_x + dim - 1, r_y + dim - 1);
+		AddMatrix(result, dim - 1, dim - 1,
+							result, dim - 1, dim - 1,
+							C[3], 0, 0,
+							true, 1, 1);
+	}
+}
+
+void Strassen::MultiMatrix(std::vector<std::vector<int>>& result,
+													 const int m1, const int n, const int m2,
+													 const std::vector<std::vector<int>>& lfs,
+													 const int l_x, const int l_y,
+													 const std::vector<std::vector<int>>& rhs,
+													 const int r_x, const int r_y) const {
+	for (int i = 0; i < m1; ++i) {
+		for (int j = 0; j < m2; ++j) {
+			result[i][j] = 0;
+			for (int k = 0; k < n; ++k) {
+				result[i][j] += lfs[l_x + i][l_y + k] * rhs[r_x + k][r_y + j];
+			}
+		}
 	}
 }
 
@@ -132,7 +217,7 @@ std::vector<std::vector<int>>
 								 const int r_x, const int r_y,
 								 const bool is_add, const int len) const {
 	std::vector<std::vector<int>> S(len, std::vector<int>(len));
-	AddMatrix(S, 0, 0, lfs, l_x, l_y, rhs, r_x, r_y, is_add, len);
+	AddMatrix(S, 0, 0, lfs, l_x, l_y, rhs, r_x, r_y, is_add, len, len);
 	return S;
 }
 
@@ -142,9 +227,10 @@ void Strassen::AddMatrix(std::vector<std::vector<int>>& result,
 													const int l_x, const int l_y,
 													const std::vector<std::vector<int>>& rhs,
 													const int r_x, const int r_y,
-													const bool is_add, const int len) const {
-	for (int i = 0; i < len; ++i) {
-		for (int j = 0; j < len; ++j) {
+													const bool is_add,
+													const int len_x, const int len_y) const {
+	for (int i = 0; i < len_x; ++i) {
+		for (int j = 0; j < len_y; ++j) {
 			result[x + i][y + j] = lfs[l_x + i][l_y + j];
 			result[x + i][y + j] += rhs[r_x + i][r_y + j] * (is_add ? 1 : -1);
 		}
