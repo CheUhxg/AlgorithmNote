@@ -11,7 +11,7 @@ Strassen::Strassen() {}
 std::vector<std::vector<int>>
 	Strassen::GetRandomMatrix(const int dimension) const {
 	std::default_random_engine random_engine;
-	std::uniform_int_distribution<int> uniform(INT_MIN, INT_MAX);
+	std::uniform_int_distribution<int> uniform(-8, 8);
 	random_engine.seed(time(NULL));
 
 	std::vector<std::vector<int>> matrix(dimension, std::vector<int>(dimension));
@@ -31,7 +31,6 @@ std::vector<std::vector<int>>
 	assert(lfs.size() == rhs.size());
 
 	std::vector<std::vector<int>> result(lfs);
-	result.clear();
 	MultiMatrix(result, lfs, 0, 0, rhs, 0, 0);
 	return result;
 }
@@ -41,7 +40,8 @@ void Strassen::MultiMatrix(std::vector<std::vector<int>>& result,
 													 const int l_x, const int l_y,
 													 const std::vector<std::vector<int>>& rhs,
 													 const int r_x, const int r_y) const {
-	int dimension = std::min(lfs.size(), rhs.size());
+	size_t dimension = std::min(lfs.size(), rhs.size());
+	dimension = std::min(dimension, result.size());
 	if (dimension == 1) {
 		result[0][0] = lfs[l_x][l_y] * rhs[r_x][r_y];
 		return;
@@ -126,8 +126,8 @@ std::vector<std::vector<int>>
 								 const int r_x, const int r_y,
 								 const bool is_add) const {
 	int dimension = lfs.size();
-	std::vector<std::vector<int>> S(dimension,
-																	std::vector<int>(dimension));
+	std::vector<std::vector<int>> S(dimension / 2,
+																	std::vector<int>(dimension / 2));
 	AddMatrix(S, 0, 0, lfs, l_x, l_y, rhs, r_x, r_y, is_add, dimension / 2);
 	return S;
 }
