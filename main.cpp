@@ -118,15 +118,41 @@ void TestPrime() {
 
 void TestStrassen() {
 	Strassen strassen;
-	auto m1 = strassen.GetRandomMatrix(8);
-	auto m2 = strassen.GetRandomMatrix(8);
+	std::vector<std::vector<int>>m1 = {
+		{0,1,3,-3},
+		{-2,-1,3,-1},
+		{1,1,-1,-3},
+		{-1,-2,1,3}
+	};
+	std::vector<std::vector<int>>m2 = {
+		{1,-3,0,1},
+		{-3,3,-1,3},
+		{0,-3,2,-1},
+		{3,-1,-2,2}
+	};
 	auto res = strassen.MultiMatrix(m1, m2);
-	for (const auto& arr : res) {
+
+	for (const auto& arr : m1) {
 		for (const int num : arr) {
-			std::cout << num << ' ';
+			std::cout << num << ',';
 		}
 		std::cout << std::endl;
 	}
+	std::cout << std::endl;
+	for (const auto& arr : m2) {
+		for (const int num : arr) {
+			std::cout << num << ',';
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+	for (const auto& arr : res) {
+		for (const int num : arr) {
+			std::cout << num << ',';
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
 }
 
 int main() {

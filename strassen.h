@@ -21,7 +21,7 @@ private:
 				 const int l_x, const int l_y,
 				 const std::vector<std::vector<int>>& rhs,
 				 const int r_x, const int r_y,
-				 const bool is_add) const;
+				 const bool is_add, const int len) const;
 	void AddMatrix(std::vector<std::vector<int>>& result,
 									const int x, const int y,
 									const std::vector<std::vector<int>>& lfs,
