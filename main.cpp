@@ -4,6 +4,7 @@
 #include "huffmantree.h"
 #include "adjacencymatrix.h"
 #include "adjacencytable.h"
+#include "strassen.h"
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
@@ -14,6 +15,7 @@ using myalgorithm::Heap;
 using myalgorithm::HuffmanTree;
 using myalgorithm::AdjacencyMatrix;
 using myalgorithm::AdjacencyTable;
+using myalgorithm::Strassen;
 
 void TestAVLTree() {
 	AVLTree avltree;
@@ -114,6 +116,19 @@ void TestPrime() {
 	std::cout << adjtab.Prime() << std::endl;
 }
 
+void TestStrassen() {
+	Strassen strassen;
+	auto m1 = strassen.GetRandomMatrix(8);
+	auto m2 = strassen.GetRandomMatrix(8);
+	auto res = strassen.MultiMatrix(m1, m2);
+	for (const auto& arr : res) {
+		for (const int num : arr) {
+			std::cout << num << ' ';
+		}
+		std::cout << std::endl;
+	}
+}
+
 int main() {
 	//TestAVLTree();
 	//TestDisJointSet();
@@ -121,5 +136,6 @@ int main() {
 	//TestHuffmanTree();
 	//TestAdjacencyMatrix();
 	//TestAdjacencyTable();
-	TestPrime();
+	//TestPrime();
+	TestStrassen();
 }
