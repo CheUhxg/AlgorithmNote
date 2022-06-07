@@ -1,19 +1,17 @@
 #include "strassen.h"
-#include <random>
 #include <algorithm>
 #include <ctime>
 #include <cassert>
 
 namespace myalgorithm {
 
-Strassen::Strassen() {}
+Strassen::Strassen() 
+		: uniform(0, 3) {
+	random_engine.seed(time(NULL)); 
+}
 
 std::vector<std::vector<int>>
-	Strassen::GetRandomMatrix(const int dimension) const {
-	std::default_random_engine random_engine;
-	std::uniform_int_distribution<int> uniform(-8, 8);
-	random_engine.seed(time(NULL));
-
+	Strassen::GetRandomMatrix(const int dimension) {
 	std::vector<std::vector<int>> matrix(dimension, std::vector<int>(dimension));
 	for (auto& arr : matrix) {
 		for (auto& ele : arr) {
@@ -40,8 +38,8 @@ void Strassen::MultiMatrix(std::vector<std::vector<int>>& result,
 													 const int l_x, const int l_y,
 													 const std::vector<std::vector<int>>& rhs,
 													 const int r_x, const int r_y) const {
-	size_t dimension = std::min(lfs.size(), rhs.size());
-	dimension = std::min(dimension, result.size());
+	int dimension = std::min(lfs.size(), rhs.size());
+	dimension = std::min(dimension, static_cast<int>(result.size()));
 	if (dimension == 1) {
 		result[0][0] = lfs[l_x][l_y] * rhs[r_x][r_y];
 		return;

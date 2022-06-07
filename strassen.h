@@ -1,12 +1,16 @@
 #ifndef STRASSEN_H_
 #define STRASSEN_H_
 
+#include <random>
 #include <vector>
 
 namespace myalgorithm {
 
 class Strassen {
 private:
+	std::default_random_engine random_engine;
+	std::uniform_int_distribution<int> uniform;
+
 	void MultiMatrix(std::vector<std::vector<int>>& result,
 									 const std::vector<std::vector<int>>& lfs,
 									 const int l_x, const int l_y,
@@ -29,7 +33,7 @@ public:
 	Strassen();
 
 	std::vector<std::vector<int>>
-		GetRandomMatrix(const int dimension) const;
+		GetRandomMatrix(const int dimension);
 	std::vector<std::vector<int>>
 		MultiMatrix(std::vector<std::vector<int>>& lfs,
 								std::vector<std::vector<int>>& rhs) const;
