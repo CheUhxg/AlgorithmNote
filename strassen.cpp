@@ -1,5 +1,6 @@
 #include "strassen.h"
 #include <random>
+#include <algorithm>
 #include <ctime>
 #include <cassert>
 
@@ -29,17 +30,22 @@ std::vector<std::vector<int>>
 	assert(lfs.size() == lfs[0].size() && rhs.size() == rhs[0].size());
 	assert(lfs.size() == rhs.size());
 
-	return MultiMatrix(lfs, rhs, 0, 0);
-}
-
-std::vector<std::vector<int>>
-	Strassen::MultiMatrix(std::vector<std::vector<int>>& lfs,
-												std::vector<std::vector<int>>& rhs,
-												const int x_start, const int y_start) const {
 	std::vector<std::vector<int>> result(lfs);
 	result.clear();
+	MultiMatrix(result, lfs, 0, 0, rhs, 0, 0);
+	return result;
+}
 
-	int dimension = lfs.size();
+void Strassen::MultiMatrix(std::vector<std::vector<int>>& result,
+													 const std::vector<std::vector<int>>& lfs,
+													 const int l_x, const int l_y,
+													 const std::vector<std::vector<int>>& rhs,
+													 const int r_x, const int r_y) const {
+	int dimension = std::min(lfs.size(), rhs.size());
+	if (dimension == 1) {
+		result[0][0] = lfs[l_x][l_y] * rhs[r_x][r_y];
+		return;
+	}
 	if (dimension % 2 == 0) {
 		std::vector<std::vector<std::vector<int>>> S(11);
 		S[1] = SetS(rhs, 0, dimension / 2,
@@ -72,8 +78,45 @@ std::vector<std::vector<int>>
 		S[10] = SetS(rhs, 0, 0,
 								 rhs, 0, dimension / 2,
 								 true);
+
+		std::vector<std::vector<std::vector<int>>> P(8);
+		for (int i = 1; i <= 7; ++i) {
+			P[i] = std::vector<std::vector<int>>(dimension / 2,
+				std::vector<int>(dimension / 2, 0));
+		}
+		MultiMatrix(P[1], lfs, 0, 0, S[1], 0, 0);
+		MultiMatrix(P[2], S[2], 0, 0, rhs, dimension / 2, dimension / 2);
+		MultiMatrix(P[3], S[3], 0, 0, rhs, 0, 0);
+		MultiMatrix(P[4], lfs, dimension / 2, dimension / 2, S[4], 0, 0);
+		MultiMatrix(P[5], S[5], 0, 0, S[6], 0, 0);
+		MultiMatrix(P[6], S[7], 0, 0, S[8], 0, 0);
+		MultiMatrix(P[7], S[9], 0, 0, S[10], 0, 0);
+
+		//C11
+		AddMatrix(result, 0, 0, P[5], 0, 0, P[4], 0, 0, true, dimension / 2);
+		AddMatrix(result, 0, 0, result, 0, 0, P[2], 0, 0, false, dimension / 2);
+		AddMatrix(result, 0, 0, result, 0, 0, P[6], 0, 0, true, dimension / 2);
+		//C12
+		AddMatrix(result, 0, dimension / 2,
+							P[1], 0, 0, 
+							P[2], 0, 0, 
+							true, dimension / 2);
+		//C21
+		AddMatrix(result, dimension / 2, 0,
+			P[3], 0, 0,
+			P[4], 0, 0,
+			true, dimension / 2);
+		//C22
+		AddMatrix(result, dimension / 2, dimension / 2,
+							P[5], 0, 0, P[1], 0, 0,
+							true, dimension / 2);
+		AddMatrix(result, dimension / 2, dimension / 2,
+							result, dimension / 2, dimension / 2,
+							P[3], 0, 0, false, dimension / 2);
+		AddMatrix(result, dimension / 2, dimension / 2,
+							result, dimension / 2, dimension / 2,
+							P[7], 0, 0, false, dimension / 2);
 	}
-	return result;
 }
 
 std::vector<std::vector<int>>
@@ -85,13 +128,23 @@ std::vector<std::vector<int>>
 	int dimension = lfs.size();
 	std::vector<std::vector<int>> S(dimension,
 																	std::vector<int>(dimension));
-	for (int i = 0; i < dimension / 2; ++i) {
-		for (int j = 0; j < dimension / 2; ++j) {
-			S[i][j] = lfs[l_x + i][l_y + j];
-			S[i][j] += rhs[r_x + i][r_y + j] * (is_add ? 1 : -1);
+	AddMatrix(S, 0, 0, lfs, l_x, l_y, rhs, r_x, r_y, is_add, dimension / 2);
+	return S;
+}
+
+void Strassen::AddMatrix(std::vector<std::vector<int>>& result,
+													const int x, const int y,
+													const std::vector<std::vector<int>>& lfs,
+													const int l_x, const int l_y,
+													const std::vector<std::vector<int>>& rhs,
+													const int r_x, const int r_y,
+													const bool is_add, const int len) const {
+	for (int i = 0; i < len; ++i) {
+		for (int j = 0; j < len; ++j) {
+			result[x + i][y + j] = lfs[l_x + i][l_y + j];
+			result[x + i][y + j] += rhs[r_x + i][r_y + j] * (is_add ? 1 : -1);
 		}
 	}
-	return S;
 }
 
 }
