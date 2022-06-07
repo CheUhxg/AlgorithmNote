@@ -5,41 +5,41 @@
 #include <list>
 
 namespace myalgorithm {
-	class AdjacencyTable
+class AdjacencyTable
+{
+private:
+	struct Node
 	{
-	private:
-		struct Node
-		{
-			size_t vertex_;
-			int weight_;
-			explicit Node(const int weight, const size_t vertex)
-				: weight_(weight), vertex_(vertex) {}
-		};
-
-		std::vector<std::list<Node>> table_;
-		size_t node_size_;
-
-		bool HasEdge(const size_t node_out, const size_t node_in) const;
-		void DFS(const size_t start_vertex, 
-						 std::vector<size_t>& ret_vertices,
-						 std::vector<bool>& is_visited) const;
-	public:
-		explicit AdjacencyTable(const size_t node_size);
-
-		bool UpdateEdge(const size_t node_out, const size_t node_in, const int weight, const bool unidirectional = true);
-		bool DeleteEdge(const size_t node_out, const size_t node_in, const bool unidirectional = true);
-
-		void Show() const;
-
-		void DFS(const size_t start_vertex,
-						 std::vector<size_t>& ret_vertices) const;
-		void BFS(const size_t start_vertex,
-						 std::vector<size_t>& ret_vertices) const;
-		void Dijkstra(const size_t start_vertex,
-									std::vector<size_t>& path,
-									std::vector<int>& ret_weights) const;
-		uint32_t Prime() const;
+		size_t vertex_;
+		int weight_;
+		explicit Node(const int weight, const size_t vertex)
+			: weight_(weight), vertex_(vertex) {}
 	};
+
+	std::vector<std::list<Node>> table_;
+	size_t node_size_;
+
+	bool HasEdge(const size_t node_out, const size_t node_in) const;
+	void DFS(const size_t start_vertex, 
+						std::vector<size_t>& ret_vertices,
+						std::vector<bool>& is_visited) const;
+public:
+	explicit AdjacencyTable(const size_t node_size);
+
+	bool UpdateEdge(const size_t node_out, const size_t node_in, const int weight, const bool unidirectional = true);
+	bool DeleteEdge(const size_t node_out, const size_t node_in, const bool unidirectional = true);
+
+	void Show() const;
+
+	void DFS(const size_t start_vertex,
+						std::vector<size_t>& ret_vertices) const;
+	void BFS(const size_t start_vertex,
+						std::vector<size_t>& ret_vertices) const;
+	void Dijkstra(const size_t start_vertex,
+								std::vector<size_t>& path,
+								std::vector<int>& ret_weights) const;
+	uint32_t Prime() const;
+};
 }
 
 #endif	//	ADJACENCY_TABLE_H_
