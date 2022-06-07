@@ -100,11 +100,26 @@ void TestAdjacencyTable() {
 	adjtab.Dijkstra(0, ret_path, ret_weights);
 }
 
+void TestPrime() {
+	AdjacencyTable adjtab(6);
+	adjtab.UpdateEdge(0, 1, 1, false);
+	adjtab.UpdateEdge(0, 4, 4, false);
+	adjtab.UpdateEdge(0, 3, 4, false);
+	adjtab.UpdateEdge(1, 3, 2, false);
+	adjtab.UpdateEdge(2, 5, 1, false);
+	adjtab.UpdateEdge(3, 2, 2, false);
+	adjtab.UpdateEdge(3, 4, 3, false);
+	adjtab.UpdateEdge(4, 5, 3, false);
+
+	std::cout << adjtab.Prime() << std::endl;
+}
+
 int main() {
 	//TestAVLTree();
 	//TestDisJointSet();
 	//TestHeap();
 	//TestHuffmanTree();
-	TestAdjacencyMatrix();
-	TestAdjacencyTable();
+	//TestAdjacencyMatrix();
+	//TestAdjacencyTable();
+	TestPrime();
 }
