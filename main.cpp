@@ -5,6 +5,7 @@
 #include "adjacencymatrix.h"
 #include "adjacencytable.h"
 #include "strassen.h"
+#include "timer.h"
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
@@ -16,6 +17,7 @@ using myalgorithm::HuffmanTree;
 using myalgorithm::AdjacencyMatrix;
 using myalgorithm::AdjacencyTable;
 using myalgorithm::Strassen;
+using myalgorithm::Timer;
 
 void TestAVLTree() {
 	AVLTree avltree;
@@ -118,41 +120,50 @@ void TestPrime() {
 
 void TestStrassen() {
 	Strassen strassen;
-	//auto m1 = strassen.GetRandomMatrix(3);
-	//auto m2 = strassen.GetRandomMatrix(3);
-	std::vector<std::vector<int>>m1 = {
-		{-1,-1,-1},
-		{-3,3,2},
-		{-3,0,-2}
-	};
-	std::vector<std::vector<int>>m2 = {
-		{3,3,1},
-		{2,-3,-2},
-		{-2,-1,-2}
-	};
+	const int matrix_dimension = 100;
+	auto m1 = strassen.GetRandomMatrix(matrix_dimension);
+	auto m2 = strassen.GetRandomMatrix(matrix_dimension);
+	//std::vector<std::vector<int>>m1 = {
+	//	{-1,-1,-1},
+	//	{-3,3,2},
+	//	{-3,0,-2}
+	//};
+	//std::vector<std::vector<int>>m2 = {
+	//	{3,3,1},
+	//	{2,-3,-2},
+	//	{-2,-1,-2}
+	//};
+	Timer::Start();
+	std::cout << "Test "
+		<< matrix_dimension << '*' << matrix_dimension
+		<< " matrix" << std::endl;
 	auto res = strassen.MultiMatrix(m1, m2);
+	Timer::End();
 
-	for (const auto& arr : m1) {
-		for (const int num : arr) {
-			std::cout << num << ',';
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-	for (const auto& arr : m2) {
-		for (const int num : arr) {
-			std::cout << num << ',';
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-	for (const auto& arr : res) {
-		for (const int num : arr) {
-			std::cout << num << ',';
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
+	std::cout << "Total " << Timer::GetDuration()
+						<< "ms" << std::endl;
+
+	//for (const auto& arr : m1) {
+	//	for (const int num : arr) {
+	//		std::cout << num << ',';
+	//	}
+	//	std::cout << std::endl;
+	//}
+	//std::cout << std::endl;
+	//for (const auto& arr : m2) {
+	//	for (const int num : arr) {
+	//		std::cout << num << ',';
+	//	}
+	//	std::cout << std::endl;
+	//}
+	//std::cout << std::endl;
+	//for (const auto& arr : res) {
+	//	for (const int num : arr) {
+	//		std::cout << num << ',';
+	//	}
+	//	std::cout << std::endl;
+	//}
+	//std::cout << std::endl;
 }
 
 int main() {
