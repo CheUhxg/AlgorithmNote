@@ -1,11 +1,10 @@
-#ifndef HEAD_H_
-#define HEAD_H_
+#ifndef HEAP_H_
+#define HEAP_H_
 
 #include <vector>
 
 namespace myalgorithm {
-class Heap
-{
+class Heap {
 private:
 	using size_t = unsigned int;
 
@@ -27,4 +26,4 @@ public:
 };	// class Heap
 }	//	namespace myalgorithm
 
-#endif	//	HEAD_H_
+#endif	//	HEAP_H_
