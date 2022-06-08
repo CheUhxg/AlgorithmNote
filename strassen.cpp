@@ -23,14 +23,19 @@ std::vector<std::vector<int>>
 
 std::vector<std::vector<int>>
 	Strassen::MultiMatrix(std::vector<std::vector<int>>& lfs,
-												std::vector<std::vector<int>>& rhs) const {
+												std::vector<std::vector<int>>& rhs,
+												const bool is_accelerate) const {
 	assert(lfs.size() > 0 && rhs.size() > 0);
 	assert(lfs.size() == lfs[0].size() && rhs.size() == rhs[0].size());
 	assert(lfs.size() == rhs.size());
 
 	int dim = lfs.size();
 	std::vector<std::vector<int>> result(dim, std::vector<int>(dim, 0));
-	MultiMatrix(result, lfs, 0, 0, rhs, 0, 0);
+	if(is_accelerate)
+		MultiMatrix(result, lfs, 0, 0, rhs, 0, 0);
+	else
+		MultiMatrix(result, dim, dim, dim, lfs, 0, 0, rhs, 0, 0);
+
 	return result;
 }
 

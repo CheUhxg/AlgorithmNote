@@ -43,7 +43,8 @@ public:
 		GetRandomMatrix(const int dimension);
 	std::vector<std::vector<int>>
 		MultiMatrix(std::vector<std::vector<int>>& lfs,
-								std::vector<std::vector<int>>& rhs) const;
+								std::vector<std::vector<int>>& rhs,
+								const bool is_accelerate) const;
 };
 
 }
