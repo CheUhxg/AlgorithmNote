@@ -120,28 +120,24 @@ void TestPrime() {
 
 void TestStrassen() {
 	Strassen strassen;
-	const int matrix_dimension = 100;
-	auto m1 = strassen.GetRandomMatrix(matrix_dimension);
-	auto m2 = strassen.GetRandomMatrix(matrix_dimension);
-	//std::vector<std::vector<int>>m1 = {
-	//	{-1,-1,-1},
-	//	{-3,3,2},
-	//	{-3,0,-2}
-	//};
-	//std::vector<std::vector<int>>m2 = {
-	//	{3,3,1},
-	//	{2,-3,-2},
-	//	{-2,-1,-2}
-	//};
-	Timer::Start();
-	std::cout << "Test "
-		<< matrix_dimension << '*' << matrix_dimension
-		<< " matrix" << std::endl;
-	auto res = strassen.MultiMatrix(m1, m2);
-	Timer::End();
+	int matrix_dimension = 100;
+	while (true) {
+		auto m1 = strassen.GetRandomMatrix(matrix_dimension);
+		auto m2 = strassen.GetRandomMatrix(matrix_dimension);
 
-	std::cout << "Total " << Timer::GetDuration()
-						<< "ms" << std::endl;
+		Timer::Start();
+		std::cout << "Test " << matrix_dimension
+			<< '*' << matrix_dimension << " matrix: ";
+		auto res = strassen.MultiMatrix(m1, m2);
+		Timer::End();
+
+		double duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+		if (duration > 1000 * 100)
+			break;
+
+		matrix_dimension += 100;
+	}
 
 	//for (const auto& arr : m1) {
 	//	for (const int num : arr) {
