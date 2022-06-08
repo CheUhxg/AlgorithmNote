@@ -11,7 +11,7 @@ Heap::Heap(const std::vector<int>& heap, bool isBigHeap)
 	MakeHeap();
 }
 
-void Heap::MakeHeap() {
+inline void Heap::MakeHeap() {
 	for (int i = heap_.size() / 2; i >= 1; --i) {
 		DownAdjust(i, tail_index_);
 	}
