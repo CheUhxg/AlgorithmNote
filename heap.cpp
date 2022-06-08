@@ -47,8 +47,8 @@ void Heap::UpAdjust(const int begin_index, const int end_index) {
 	}
 }
 
-bool Heap::JudgeForOrder(const int up_value, const int down_value) const {
-	return big_heap_ == up_value > down_value;
+inline bool Heap::JudgeForOrder(const int up_value, const int down_value) const {
+	return big_heap_ == (up_value > down_value);
 }
 
 void Heap::Pop() {
