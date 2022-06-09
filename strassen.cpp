@@ -6,16 +6,14 @@
 namespace myalgorithm {
 
 Strassen::Strassen() 
-		: uniform(-3, 3) {
-	random_engine.seed(time(NULL)); 
-}
+		: uniform(-3, 3) {}
 
 std::vector<std::vector<int>>
 	Strassen::GetRandomMatrix(const int dimension) {
 	std::vector<std::vector<int>> matrix(dimension, std::vector<int>(dimension));
 	for (auto& arr : matrix) {
 		for (auto& ele : arr) {
-			ele = uniform(random_engine);
+			ele = uniform(gen);
 		}
 	}
 	return matrix;

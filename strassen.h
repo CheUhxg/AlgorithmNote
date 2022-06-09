@@ -8,7 +8,7 @@ namespace myalgorithm {
 
 class Strassen {
 private:
-	std::default_random_engine random_engine;
+	std::mt19937 gen{ std::random_device{}() };
 	std::uniform_int_distribution<int> uniform;
 
 	void MultiMatrix(std::vector<std::vector<int>>& result,
