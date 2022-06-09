@@ -17,26 +17,64 @@ private:
 	void Sort(std::vector<T>& origin,
 						const int start_index, 
 						const int end_index,
-						const bool is_random) const;
+						const bool is_random) {
+		if (start_index >= end_index)
+			return;
+
+		int privot = Partition(origin, start_index, end_index, is_random);
+		Sort(origin, start_index, privot - 1, is_random);
+		Sort(origin, privot + 1, end_index, is_random);
+	}
 
 	template<typename T>
-	void Partition(std::vector<T>& origin,
+	int Partition(std::vector<T>& origin,
 								const int start_index, 
 								const int end_index,
-								const bool is_random) const;
+								const bool is_random) {
+		if (is_random) {
+			decltype(uniform)::param_type param{ start_index, end_index };
+			uniform.param(param);
+			std::swap(origin[uniform(gen)], origin[end_index]);
+		}
+
+		T mid_value = origin[end_index];
+		int index = start_index - 1;
+		for (int i = start_index; i < end_index; ++i) {
+			if (JudgeForOrder(mid_value, origin[i])) {
+				std::swap(origin[i], origin[++index]);
+			}
+		}
+		std::swap(origin[end_index], origin[++index]);
+		return index;
+	}
 
 	template<typename T>
-	inline bool JudgeForOrder(const T& lt, const T& rt);
+	inline bool JudgeForOrder(const T& lt, const T& rt) const {
+		return is_increase == (lt > rt);
+	}
 public:
 	QuickSort();
 
 	template<typename T>
-	void GetRandomVector(std::vector<T>& origin) const;
+	void GetRandomVector(std::vector<T>& origin,
+											const int size) {
+		T type_max = std::numeric_limits<T>::max();
+		T type_min = std::numeric_limits<T>::min();
+		std::uniform_int_distribution<T> item_uniform(type_min, type_max);
+
+		origin.resize(size);
+		for (T& item : origin) {
+			item = item_uniform(gen);
+		}
+	}
 
 	template<typename T>
 	void Sort(std::vector<T>& origin, 
-						const bool is_random,
-						const bool is_increase = true) const;
+						const bool is_random = true,
+						const bool is_increase = true) {
+		this->is_increase = is_increase;
+		Sort(origin, 0, origin.size() - 1, is_random);
+	}
 };	//	class QuickSort
 
 }	//	namespace myalgorithm
