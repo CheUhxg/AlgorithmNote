@@ -6,6 +6,7 @@
 #include "adjacencytable.h"
 #include "strassen.h"
 #include "timer.h"
+#include "quicksort.h"
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
@@ -18,6 +19,29 @@ using myalgorithm::AdjacencyMatrix;
 using myalgorithm::AdjacencyTable;
 using myalgorithm::Strassen;
 using myalgorithm::Timer;
+using myalgorithm::QuickSort;
+
+void TestAVLTree();
+void TestDisJointSet();
+void TestHeap();
+void TestHuffmanTree();
+void TestAdjacencyMatrix();
+void TestAdjacencyTable();
+void TestPrime();
+void TestStrassen();
+void TestQuickSort();
+
+int main() {
+	//TestAVLTree();
+	//TestDisJointSet();
+	//TestHeap();
+	//TestHuffmanTree();
+	//TestAdjacencyMatrix();
+	//TestAdjacencyTable();
+	//TestPrime();
+	//TestStrassen();
+	TestQuickSort();
+}
 
 void TestAVLTree() {
 	AVLTree avltree;
@@ -32,7 +56,7 @@ void TestDisJointSet() {
 	int n, m;
 	std::cin >> n >> m;
 
-	DisJointSet disjointset(n+1);
+	DisJointSet disjointset(n + 1);
 	while (m--) {
 		int primary_friend, secondary_friend;
 		std::cin >> primary_friend >> secondary_friend;
@@ -125,50 +149,61 @@ void TestStrassen() {
 		auto m1 = strassen.GetRandomMatrix(matrix_dimension);
 		auto m2 = strassen.GetRandomMatrix(matrix_dimension);
 
+		double duration;
+		std::cout << matrix_dimension << '*' << matrix_dimension
+			<< " matrix" << std::endl;
+
+		std::cout << "->Simple:\t\t";
 		Timer::Start();
-		std::cout << "Test " << matrix_dimension
-			<< '*' << matrix_dimension << " matrix: ";
-		auto res = strassen.MultiMatrix(m1, m2);
+		auto res_simple = strassen.MultiMatrix(m1, m2, false);
 		Timer::End();
-
-		double duration = Timer::GetDuration();
+		duration = Timer::GetDuration();
 		std::cout << duration << "ms" << std::endl;
-		if (duration > 1000 * 100)
-			break;
 
+		std::cout << "->Strassen:\t\t";
+		Timer::Start();
+		auto res_strassen = strassen.MultiMatrix(m1, m2, true);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << (res_simple == res_strassen ? "<Right>" : "<Wrong>")
+			<< std::endl;
+		std::cout << std::endl;
 		matrix_dimension += 100;
 	}
-
-	//for (const auto& arr : m1) {
-	//	for (const int num : arr) {
-	//		std::cout << num << ',';
-	//	}
-	//	std::cout << std::endl;
-	//}
-	//std::cout << std::endl;
-	//for (const auto& arr : m2) {
-	//	for (const int num : arr) {
-	//		std::cout << num << ',';
-	//	}
-	//	std::cout << std::endl;
-	//}
-	//std::cout << std::endl;
-	//for (const auto& arr : res) {
-	//	for (const int num : arr) {
-	//		std::cout << num << ',';
-	//	}
-	//	std::cout << std::endl;
-	//}
-	//std::cout << std::endl;
 }
 
-int main() {
-	//TestAVLTree();
-	//TestDisJointSet();
-	//TestHeap();
-	//TestHuffmanTree();
-	//TestAdjacencyMatrix();
-	//TestAdjacencyTable();
-	//TestPrime();
-	TestStrassen();
+void TestQuickSort() {
+	QuickSort quicksort;
+	int size = 10000;
+
+	for (int i = 4; ; ++i) {
+		std::vector<int> v1;
+		quicksort.GetRandomVector(v1, size);
+		std::vector<int> v2(v1);
+
+		double duration;		
+		std::cout << "Size: 10^" << i << std::endl;
+
+		std::cout << "->Quicksort(Random):\t\t";
+		Timer::Start();
+		quicksort.Sort(v1);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << "->Quicksort(NoRandom):\t\t";
+		Timer::Start();
+		quicksort.Sort(v2, false);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << (v1 == v2 ? "<Right>" : "<Wrong>")
+			<< std::endl;
+		std::cout << std::endl;
+
+		size *= 10;
+	}
 }
