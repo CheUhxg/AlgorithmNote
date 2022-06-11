@@ -56,19 +56,6 @@ public:
 	QuickSort();
 
 	template<typename T>
-	void GetRandomVector(std::vector<T>& origin,
-											const int size) {
-		T type_max = std::numeric_limits<T>::max();
-		T type_min = std::numeric_limits<T>::min();
-		std::uniform_int_distribution<T> item_uniform(type_min, type_max);
-
-		origin.resize(size);
-		for (T& item : origin) {
-			item = item_uniform(gen);
-		}
-	}
-
-	template<typename T>
 	void Sort(std::vector<T>& origin, 
 						const bool is_random = true,
 						const bool is_increase = true) {
