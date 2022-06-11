@@ -7,7 +7,7 @@ BucketSort::BucketSort(const int size)
 
 void BucketSort::Sort(std::vector<int>& origin) const {
 	int max_item = *(std::max_element(origin.begin(), origin.end()));
-	std::vector<Bucket*> buckets(max_item / bucket_size_ + 1, new Bucket);
+	std::vector<Bucket*> buckets(max_item / bucket_size_ + 1, nullptr);
 
 	for (const int num : origin) {
 		Insert(buckets, num);
@@ -19,7 +19,12 @@ void BucketSort::Sort(std::vector<int>& origin) const {
 void BucketSort::Insert(std::vector<Bucket*>& buckets, 
 												const int num) const {
 	int index = num / bucket_size_;
-	Bucket* pre = buckets[index], *cur = pre->next;
+	if (buckets[index] == nullptr) {
+		buckets[index] = new Bucket;
+	}
+
+	Bucket* pre = buckets[index];
+	Bucket*cur = pre->next;
 
 	while (cur) {
 		if (cur->value > num) {
@@ -36,9 +41,12 @@ void BucketSort::Combine(std::vector<Bucket*>& buckets,
 												 std::vector<int>& origin) const {
 	int index = 0;
 	for (Bucket* bucket : buckets) {
-		bucket = bucket->next;
-		while (bucket) {
-			origin[index++] = bucket->value;
+		if (bucket != nullptr) {
+			bucket = bucket->next;
+			while (bucket) {
+				origin[index++] = bucket->value;
+				bucket = bucket->next;
+			}
 		}
 	}
 }
