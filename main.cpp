@@ -7,6 +7,7 @@
 #include "strassen.h"
 #include "timer.h"
 #include "quicksort.h"
+#include "bucketsort.h"
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
@@ -20,6 +21,23 @@ using myalgorithm::AdjacencyTable;
 using myalgorithm::Strassen;
 using myalgorithm::Timer;
 using myalgorithm::QuickSort;
+using myalgorithm::BucketSort;
+
+std::vector<int> GetRandomVector(const int size,
+																	const int min_value = INT_MIN,
+																	const int max_value = INT_MAX) {
+	std::mt19937 gen{ std::random_device{}() };
+
+	std::vector<int> origin;
+	std::uniform_int_distribution<int> 
+		item_uniform(min_value, max_value);
+
+	origin.resize(size);
+	for (int& item : origin) {
+		item = item_uniform(gen);
+	}
+	return origin;
+}
 
 void TestAVLTree();
 void TestDisJointSet();
@@ -30,6 +48,7 @@ void TestAdjacencyTable();
 void TestPrime();
 void TestStrassen();
 void TestQuickSort();
+void TestBucketSort();
 
 int main() {
 	//TestAVLTree();
@@ -40,7 +59,8 @@ int main() {
 	//TestAdjacencyTable();
 	//TestPrime();
 	//TestStrassen();
-	TestQuickSort();
+	//TestQuickSort();
+	TestBucketSort();
 }
 
 void TestAVLTree() {
@@ -179,8 +199,7 @@ void TestQuickSort() {
 	int size = 10000;
 
 	for (int i = 4; ; ++i) {
-		std::vector<int> v1;
-		quicksort.GetRandomVector(v1, size);
+		std::vector<int> v1(GetRandomVector(size));
 		std::vector<int> v2(v1);
 
 		double duration;		
@@ -201,6 +220,47 @@ void TestQuickSort() {
 		std::cout << duration << "ms" << std::endl;
 
 		std::cout << (v1 == v2 ? "<Right>" : "<Wrong>")
+			<< std::endl;
+		std::cout << std::endl;
+
+		size *= 10;
+	}
+}
+
+void TestBucketSort() {
+	QuickSort quicksort;
+	BucketSort bucketsort;
+	int size = 10000;
+
+	for (int i = 4; ; ++i) {
+		std::vector<int> v1(GetRandomVector(size, 0, 1000000));
+		std::vector<int> v2(v1), v3(v1);
+
+		double duration;
+		std::cout << "Size: 10^" << i << std::endl;
+
+		std::cout << "->Bucketsort:\t\t\t";
+		Timer::Start();
+		bucketsort.Sort(v1);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << "->Quicksort(Random):\t\t";
+		Timer::Start();
+		quicksort.Sort(v2);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << "->Quicksort(NoRandom):\t\t";
+		Timer::Start();
+		quicksort.Sort(v3, false);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << (v1 == v2 && v2 == v3 ? "<Right>" : "<Wrong>")
 			<< std::endl;
 		std::cout << std::endl;
 
