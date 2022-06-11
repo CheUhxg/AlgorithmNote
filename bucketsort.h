@@ -8,7 +8,7 @@ namespace myalgorithm {
 
 class BucketSort {
 private:
-	static const int default_size_ = 53;
+	static const int default_size_ = 1e9 + 7;
 	int bucket_size_;
 	struct Bucket
 	{
