@@ -57,10 +57,10 @@ int main() {
 	//TestHuffmanTree();
 	//TestAdjacencyMatrix();
 	//TestAdjacencyTable();
-	//TestPrime();
+	TestPrime();
 	//TestStrassen();
 	//TestQuickSort();
-	TestBucketSort();
+	//TestBucketSort();
 }
 
 void TestAVLTree() {
@@ -158,8 +158,10 @@ void TestPrime() {
 	adjtab.UpdateEdge(3, 2, 2, false);
 	adjtab.UpdateEdge(3, 4, 3, false);
 	adjtab.UpdateEdge(4, 5, 3, false);
+	adjtab.Show();
 
-	std::cout << adjtab.Prime() << std::endl;
+	auto tmp_table = adjtab.Prime();
+	tmp_table.Show();
 }
 
 void TestStrassen() {
