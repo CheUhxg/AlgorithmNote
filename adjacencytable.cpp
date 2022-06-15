@@ -163,7 +163,8 @@ AdjacencyTable AdjacencyTable::Prime() const {
 		if (now_index != distance[now_index][1]) {
 			ret_table.UpdateEdge(now_index,
 													distance[now_index][1],
-													distance[now_index][0]);
+													distance[now_index][0],
+													false);
 		}
 		for (const auto& node : table_[now_index]) {
 			if (distance[node.vertex_][0] > distance[now_index][0] + node.weight_) {
