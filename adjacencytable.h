@@ -38,7 +38,7 @@ public:
 	void Dijkstra(const size_t start_vertex,
 								std::vector<size_t>& path,
 								std::vector<int>& ret_weights) const;
-	uint32_t Prime() const;
+	AdjacencyTable Prime() const;
 };
 }
 

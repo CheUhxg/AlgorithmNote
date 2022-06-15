@@ -143,29 +143,36 @@ void AdjacencyTable::Dijkstra(const size_t start_vertex,
 	ret_weights.swap(distance);
 }
 
-uint32_t AdjacencyTable::Prime() const {
-	std::vector<int> distance(node_size_, MAX_DISTANCE);
-	std::unordered_set<int> visited;
+AdjacencyTable AdjacencyTable::Prime() const {
 	int now_index;
-	uint32_t ret_len = 0;
-	distance[0] = 0;
+	AdjacencyTable ret_table(this->node_size_);
+	std::unordered_set<int> visited;
+	std::vector<std::vector<int>> distance(node_size_, std::vector<int>(2, MAX_DISTANCE));
+	distance[0][0] = 0;
+	distance[0][1] = 0;
 	for (int i = 0; i < node_size_; ++i) {
 		now_index = -1;
 		for (int j = 0; j < node_size_; ++j) {
 			if (visited.count(j) == 0 &&
 					(now_index == -1 || 
-						distance[j] < distance[now_index])) {
+						distance[j][0] < distance[now_index][0])) {
 				now_index = j;
 			}
 		}
 		visited.insert(now_index);
-		ret_len += distance[now_index];
+		if (now_index != distance[now_index][1]) {
+			ret_table.UpdateEdge(now_index,
+													distance[now_index][1],
+													distance[now_index][0]);
+		}
 		for (const auto& node : table_[now_index]) {
-			distance[node.vertex_] = std::min(distance[node.vertex_],
-																				distance[now_index] + node.weight_);
+			if (distance[node.vertex_][0] > distance[now_index][0] + node.weight_) {
+				distance[node.vertex_][0] = distance[now_index][0] + node.weight_;
+				distance[node.vertex_][1] = now_index;
+			}
 		}
 	}
-	return ret_len;
+	return ret_table;
 }
 
 }
