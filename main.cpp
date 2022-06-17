@@ -8,6 +8,8 @@
 #include "timer.h"
 #include "quicksort.h"
 #include "bucketsort.h"
+#include "kmp.h"
+#include <random>
 #include <iostream>
 #include <algorithm>
 #include <unordered_set>
@@ -22,6 +24,7 @@ using myalgorithm::Strassen;
 using myalgorithm::Timer;
 using myalgorithm::QuickSort;
 using myalgorithm::BucketSort;
+using myalgorithm::Kmp;
 
 std::vector<int> GetRandomVector(const int size,
 																	const int min_value = INT_MIN,
@@ -49,6 +52,7 @@ void TestPrime();
 void TestStrassen();
 void TestQuickSort();
 void TestBucketSort();
+void TestKmp();
 
 int main() {
 	//TestAVLTree();
@@ -57,10 +61,11 @@ int main() {
 	//TestHuffmanTree();
 	//TestAdjacencyMatrix();
 	//TestAdjacencyTable();
-	TestPrime();
+	//TestPrime();
 	//TestStrassen();
 	//TestQuickSort();
 	//TestBucketSort();
+	TestKmp();
 }
 
 void TestAVLTree() {
@@ -267,5 +272,49 @@ void TestBucketSort() {
 		std::cout << std::endl;
 
 		size *= 10;
+	}
+}
+
+void TestKmp() {
+	std::mt19937 gen{ std::random_device{}() };
+	std::uniform_int_distribution<int> uniform('a', 'z');
+
+	Kmp kmp;
+	double duration;
+	for (int size = 100; size <= 1e7; size *= 10) {
+		std::string origin(size, '\0'), pattern(size / 10, '\0');
+		for (int i = 0; i < size; ++i) {
+			origin[i] = uniform(gen);
+		}
+		for (int i = 0; i < size / 10; ++i) {
+			pattern[i] = origin[size / 10 * 8 + i];
+		}
+
+		std::cout << "Size: " << size << std::endl;
+
+		std::cout << "->C++11:\t";
+		Timer::Start();
+		int cpp_res = origin.find(pattern);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << "->Kmp(First):\t";
+		Timer::Start();
+		int kmp_first_res = kmp.FindFirst(origin, pattern);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << "->Kmp(Last):\t";
+		Timer::Start();
+		int kmp_last_res = kmp.FindFirst(origin, pattern);
+		Timer::End();
+		duration = Timer::GetDuration();
+		std::cout << duration << "ms" << std::endl;
+
+		std::cout << (cpp_res == kmp_last_res  ? "<Right>" : "<Wrong>")
+			<< std::endl;
+		std::cout << std::endl;
 	}
 }
