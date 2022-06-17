@@ -35,7 +35,7 @@ namespace myalgorithm {
 				++j;
 			}
 			if (j == pattern.size() - 1) {
-				return i - pattern.size();
+				return i + 1 - pattern.size();
 			}
 		}
 		return -1;
