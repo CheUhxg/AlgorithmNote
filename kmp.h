@@ -14,7 +14,6 @@ public:
 
 	int FindFirst(const std::string& origin,
 								const std::string& pattern) const;
-
 	int FindLast(const std::string& origin,
 								const std::string& pattern) const;
 };	//	class Kmp

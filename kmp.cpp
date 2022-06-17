@@ -49,7 +49,7 @@ namespace myalgorithm {
 		std::reverse(tmp_origin.begin(), tmp_origin.end());
 		std::reverse(tmp_pattern.begin(), tmp_pattern.end());
 
-		return origin.size() - FindFirst(tmp_origin, tmp_pattern);
+		return origin.size() - pattern.size() - FindFirst(tmp_origin, tmp_pattern);
 	}
 
 }
